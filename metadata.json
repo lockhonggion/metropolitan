@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Metropolitan Business Centre",
+  "description": "A premium corporate website for Metropolitan Business Centre in Ho Chi Minh City, featuring a modern design, location details, and leasing information.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
