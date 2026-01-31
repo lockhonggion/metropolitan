@@ -3,6 +3,7 @@ import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { CONTACT_INFO } from '../constants';
 import { Mail, Phone, Clock, MapPin, Send, CheckCircle, X } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,12 +13,12 @@ const Contact: React.FC = () => {
     phone: '',
     message: ''
   });
-  
+
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Construct the email subject and body
     const subject = `Office Inquiry: ${formData.name} from ${formData.company || 'Website'}`;
     const body = `Name: ${formData.name}
@@ -34,8 +35,15 @@ ${formData.message}`;
     // Open the email client
     window.location.href = mailtoLink;
 
-    // Show success announcement
+    // Show success announcement with effect!
     setShowSuccess(true);
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ca8a04', '#0f172a', '#ffffff'] // Brand colors: Amber, Slate, White
+    });
+
     setFormData({ name: '', company: '', email: '', phone: '', message: '' });
 
     // Hide success message after 5 seconds
@@ -51,13 +59,13 @@ ${formData.message}`;
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="container mx-auto px-6">
-        <SectionHeading 
+        <SectionHeading
           subtitle="Get In Touch"
           title="Inquire About Office Space"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-12">
-          
+
           {/* Contact Information */}
           <div className="space-y-8">
             <p className="text-lg text-slate-600 mb-8">
@@ -117,8 +125,8 @@ ${formData.message}`;
 
           {/* Contact Form */}
           <div className="relative">
-             {/* Success Announcement Banner */}
-             {showSuccess && (
+            {/* Success Announcement Banner */}
+            {showSuccess && (
               <div className="absolute top-0 left-0 w-full transform -translate-y-full mb-4 z-10 animate-in fade-in slide-in-from-bottom-2">
                 <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-6 py-4 rounded-sm shadow-md flex items-start gap-3">
                   <CheckCircle className="flex-shrink-0 mt-0.5 text-emerald-600" size={20} />
@@ -139,9 +147,9 @@ ${formData.message}`;
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
-                  <input 
+                  <input
                     required
-                    type="text" 
+                    type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -151,8 +159,8 @@ ${formData.message}`;
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Company</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
@@ -165,9 +173,9 @@ ${formData.message}`;
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
-                  <input 
+                  <input
                     required
-                    type="email" 
+                    type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -177,8 +185,8 @@ ${formData.message}`;
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
@@ -190,7 +198,7 @@ ${formData.message}`;
 
               <div className="mb-8">
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
-                <textarea 
+                <textarea
                   required
                   name="message"
                   value={formData.message}
