@@ -59,12 +59,10 @@ const Contact: React.FC = () => {
       }, 5000);
     } catch (error: any) {
       console.error("Failed to send email:", error);
-      setErrorMessage("Failed to send email. Please try again.");
+      // Try to get the specific error message from EmailJS
+      const specificError = error?.text || error?.message || JSON.stringify(error);
+      setErrorMessage(`Error: ${specificError}`);
       setShowError(true);
-
-      // "Red effect" - Shake animation or just red confetti? 
-      // User asked for "red effect", let's do a small red confetti burst to emphasize attention? 
-      // Actually, error confetti might be confusing. Visual red banner is key.
     }
   };
 
