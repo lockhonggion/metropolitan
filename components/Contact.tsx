@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
     try {
       await emailjs.send(
         "service_uyxkpip",
-        "template_9h9ka78",
+        "d6xbjlh",
         {
           name: formData.name,
           company: formData.company,
