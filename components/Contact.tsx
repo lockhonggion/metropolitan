@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { CONTACT_INFO } from '../constants';
+import emailjs from '@emailjs/browser';
 import { Mail, Phone, Clock, MapPin, Send, CheckCircle, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -16,40 +17,42 @@ const Contact: React.FC = () => {
 
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Construct the email subject and body
-    const subject = `Office Inquiry: ${formData.name} from ${formData.company || 'Website'}`;
-    const body = `Name: ${formData.name}
-Company: ${formData.company}
-Email: ${formData.email}
-Phone: ${formData.phone}
+    try {
+      await emailjs.send(
+        "service_uyxkpip",
+        "template_9h9ka78",
+        {
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message
+        },
+        "P1yEwsi8dPB7IOp3A"
+      );
 
-Message:
-${formData.message}`;
+      // Show success announcement with effect!
+      setShowSuccess(true);
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ca8a04', '#0f172a', '#ffffff'] // Brand colors: Amber, Slate, White
+      });
 
-    // Create the mailto link
-    const mailtoLink = `mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setFormData({ name: '', company: '', email: '', phone: '', message: '' });
 
-    // Open the email client
-    window.location.href = mailtoLink;
-
-    // Show success announcement with effect!
-    setShowSuccess(true);
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#ca8a04', '#0f172a', '#ffffff'] // Brand colors: Amber, Slate, White
-    });
-
-    setFormData({ name: '', company: '', email: '', phone: '', message: '' });
-
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 5000);
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      alert("Failed to send email. Please try again.");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
