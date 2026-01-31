@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { CONTACT_INFO } from '../constants';
 import emailjs from '@emailjs/browser';
-import { Mail, Phone, Clock, MapPin, Send, CheckCircle, X } from 'lucide-react';
+import { Mail, Phone, Clock, MapPin, Send, CheckCircle, X, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const Contact: React.FC = () => {
@@ -16,9 +16,18 @@ const Contact: React.FC = () => {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    // Initialize EmailJS once
+    emailjs.init("P1yEwsi8dPB7IOp3A");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShowError(false);
+    setShowSuccess(false);
 
     try {
       await emailjs.send(
@@ -30,8 +39,7 @@ const Contact: React.FC = () => {
           email: formData.email,
           phone: formData.phone,
           message: formData.message
-        },
-        "P1yEwsi8dPB7IOp3A"
+        }
       );
 
       // Show success announcement with effect!
@@ -49,9 +57,14 @@ const Contact: React.FC = () => {
       setTimeout(() => {
         setShowSuccess(false);
       }, 5000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to send email:", error);
-      alert("Failed to send email. Please try again.");
+      setErrorMessage("Failed to send email. Please try again.");
+      setShowError(true);
+
+      // "Red effect" - Shake animation or just red confetti? 
+      // User asked for "red effect", let's do a small red confetti burst to emphasize attention? 
+      // Actually, error confetti might be confusing. Visual red banner is key.
     }
   };
 
@@ -140,6 +153,24 @@ const Contact: React.FC = () => {
                     </p>
                   </div>
                   <button onClick={() => setShowSuccess(false)} className="text-emerald-500 hover:text-emerald-800">
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Error Announcement Banner (Red Effect) */}
+            {showError && (
+              <div className="absolute top-0 left-0 w-full transform -translate-y-full mb-4 z-10 animate-in fade-in slide-in-from-bottom-2">
+                <div className="bg-rose-50 border border-rose-200 text-rose-800 px-6 py-4 rounded-sm shadow-md flex items-start gap-3">
+                  <AlertCircle className="flex-shrink-0 mt-0.5 text-rose-600" size={20} />
+                  <div className="flex-1">
+                    <h5 className="font-bold text-sm">Failed to Send</h5>
+                    <p className="text-sm text-rose-700 mt-1">
+                      {errorMessage}
+                    </p>
+                  </div>
+                  <button onClick={() => setShowError(false)} className="text-rose-500 hover:text-rose-800">
                     <X size={18} />
                   </button>
                 </div>
