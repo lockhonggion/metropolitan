@@ -3,6 +3,7 @@ import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { CONTACT_INFO } from '../constants';
 import emailjs from '@emailjs/browser';
+import { supabase } from '../lib/supabaseClient';
 import { Mail, Phone, Clock, MapPin, Send, CheckCircle, X, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -30,6 +31,22 @@ const Contact: React.FC = () => {
     setShowSuccess(false);
 
     try {
+      // 1. Save to Supabase
+      const { error: supabaseError } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            name: formData.name,
+            company: formData.company,
+            email: formData.email,
+            phone: formData.phone,
+            message: formData.message
+          }
+        ]);
+
+      if (supabaseError) {
+        throw new Error(`Database Error: ${supabaseError.message}`);
+      }
       await emailjs.send(
         "service_uyxkpip",
         "template_9h9ka78",
