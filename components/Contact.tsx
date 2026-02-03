@@ -49,7 +49,7 @@ const Contact: React.FC = () => {
       }
       await emailjs.send(
         "service_uyxkpip",
-        "template_9h9ka78",
+        "template_gecy95p",
         {
           name: formData.name,
           company: formData.company,
