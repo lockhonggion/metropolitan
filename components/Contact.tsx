@@ -47,17 +47,22 @@ const Contact: React.FC = () => {
       if (supabaseError) {
         throw new Error(`Database Error: ${supabaseError.message}`);
       }
-      await emailjs.send(
-        "service_uyxkpip",
-        "template_gecy95p",
-        {
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message
-        }
-      );
+
+      // 2. Send Emails (Admin Notification + Auto-reply)
+      const templateParams = {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message
+      };
+
+      await Promise.all([
+        // Admin Notification
+        emailjs.send("service_uyxkpip", "template_gecy95p", templateParams),
+        // Customer Auto-reply
+        emailjs.send("service_uyxkpip", "template_9h9ka78", templateParams)
+      ]);
 
       // Show success announcement with effect!
       setShowSuccess(true);
