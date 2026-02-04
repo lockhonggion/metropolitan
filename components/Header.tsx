@@ -15,20 +15,23 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <header 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-md py-4' : 'bg-transparent py-6'
-      }`}
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-4' : 'bg-transparent py-6'
+        }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <a href="#" className="flex flex-col">
-          <span className={`text-xl md:text-2xl font-serif font-bold tracking-tight uppercase ${isScrolled ? 'text-brand-dark' : 'text-white'}`}>
-            Metropolitan
-          </span>
-          <span className={`text-[10px] tracking-[0.2em] uppercase ${isScrolled ? 'text-brand-accent' : 'text-gray-200'}`}>
-            Business Centre
-          </span>
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-3">
+          <img src="/logo.png" alt="Metropolitan Logo" className="h-12 w-auto object-contain bg-white rounded-full p-0.5" />
+          <div className="flex flex-col">
+            <span className={`text-xl md:text-2xl font-serif font-bold tracking-tight uppercase ${isScrolled ? 'text-brand-dark' : 'text-white'}`}>
+              Metropolitan
+            </span>
+            <span className={`text-[10px] tracking-[0.2em] uppercase ${isScrolled ? 'text-brand-accent' : 'text-gray-200'}`}>
+              Business Centre
+            </span>
+          </div>
         </a>
 
         {/* Desktop Nav */}
@@ -37,23 +40,21 @@ const Header: React.FC = () => {
             <a
               key={link.label}
               href={link.href}
-              className={`text-sm font-medium tracking-wide transition-colors ${
-                isScrolled ? 'text-slate-600 hover:text-brand-accent' : 'text-gray-200 hover:text-white'
-              }`}
+              className={`text-sm font-medium tracking-wide transition-colors ${isScrolled ? 'text-slate-600 hover:text-brand-accent' : 'text-gray-200 hover:text-white'
+                }`}
             >
               {link.label}
             </a>
           ))}
-          <div className={`flex items-center gap-2 px-4 py-2 border rounded-sm ${
-             isScrolled ? 'border-brand-dark text-brand-dark' : 'border-white text-white'
-          }`}>
-             <Phone size={16} />
-             <span className="text-sm font-semibold">{CONTACT_INFO.phone}</span>
+          <div className={`flex items-center gap-2 px-4 py-2 border rounded-sm ${isScrolled ? 'border-brand-dark text-brand-dark' : 'border-white text-white'
+            }`}>
+            <Phone size={16} />
+            <span className="text-sm font-semibold">{CONTACT_INFO.phone}</span>
           </div>
         </nav>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className="md:hidden focus:outline-none"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
